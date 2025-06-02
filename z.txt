@@ -1,75 +1,30 @@
-   ==KEGIATAN 1==
-1. Masuk sebagai user `praktikum2025`
-Command:
-su - praktikum2025
-2. Buat file konfigurasi rsyslog untuk log debug
-Command:
-sudo nano /etc/rsyslog.d/debug-to-messages-debug.conf
-Isi file:
-*.debug    /var/log/messages-debug
-3. Restart service rsyslog
-Command:
-sudo systemctl restart rsyslog
-4. Pastikan file /var/log/messages-debug terbuat
-Command:
-ls -l /var/log/messages-debug
-5. Buat pesan log baru “Uji Debug”
-Command:
-logger -p user.debug "Uji Debug"
-6. Tampilkan 10 pesan terakhir dari /var/log/messages-debug
-Command:
-tail -n 10 /var/log/messages-debug
-   ==KEGIATAN 2==
-1. Masuk sebagai user `praktikum2025`
-Command:
-su - praktikum2025
-2. Pastikan direktori /var/log/journal tidak ada
-Command:
-ls -ld /var/log/journal
-Jika ada:
-sudo rm -rf /var/log/journal
-3. Edit konfigurasi systemd-journald agar log persisten
-Command:
-sudo nano /etc/systemd/journald.conf
-Ubah/isi:
-Storage=persistent
-4. Lihat direktori /run/log/journal
-Command:
-ls /run/log/journal
-5. Reboot sistem
-Command:
+## KEGIATAN 1: Partitioning & Mounting Filesystem
+lsblk
+sudo cfdisk /dev/sdb
+sudo mkfs.xfs /dev/sdb1
+sudo mkfs.ext4 /dev/sdb2
+sudo mkswap /dev/sdb3
+sudo mkdir -p /home/praktikum2025/workdir
+sudo mkdir -p /home/praktikum2025/backup
+sudo mount /dev/sdb1 /home/praktikum2025/workdir
+sudo mount /dev/sdb2 /home/praktikum2025/backup
+sudo chown -R username:username /home/praktikum2025/workdir
+sudo chown -R username:username /home/praktikum2025/backup
+touch /home/praktikum2025/workdir/log.txt
+touch /home/praktikum2025/backup/log.txt
+
+## KEGIATAN 2: Managing Swap Filesystem
+sudo mkswap /dev/sdb3
+sudo swapon /dev/sdb3
+swapon --show
+sudo swapoff /dev/sdb3
+swapon --show
+
+## KEGIATAN 3: Persisting Filesystem Partition
+lsblk -f
+sudo nano /etc/fstab
+sudo mount -a
 sudo reboot
-6. Pastikan direktori /var/log/journal sudah terbuat
-Command:
-ls /var/log/journal
-7. Buka salah satu file log di /var/log/journal
-Command:
-ls /var/log/journal/<NAMA_DIREKTORI>
-sudo journalctl --file=/var/log/journal/<NAMA_DIREKTORI>/<NAMA_FILE_LOG>
-    ==KEGIATAN 3==
-1. Tampilkan log events dari systemd
-Command:
-pidof systemd
-Misal hasil: 1
-journalctl _PID=1
-2. Tampilkan log events dari salah satu user
-Command:
-id praktikum2025
-atau
-cat /etc/passwd
-Misal UID: 1000
-journalctl _UID=1000
-3. Tampilkan log events dengan prioritas warning
-Command:
-journalctl -p warning
-4. Tampilkan log 20 menit terakhir
-Command:
-journalctl --since "20 minutes ago"
-5. Tampilkan log chronyd.service sejak 07:00 pagi
-Command:
-journalctl -u chronyd.service --since "07:00"
-6. Lihat log real-time sambil login SSH
-Terminal 1:
-journalctl -f
-Terminal 2:
-ssh localhost
+ls /home/praktikum2025/workdir
+ls /home/praktikum2025/backup
+swapon --show
