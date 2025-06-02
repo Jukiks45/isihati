@@ -1,4 +1,4 @@
-## KEGIATAN 1: Partitioning & Mounting Filesystem
+KEGIATAN 1: Partitioning & Mounting Filesystem
 lsblk
 sudo cfdisk /dev/sdb
 sudo mkfs.xfs /dev/sdb1
@@ -13,14 +13,14 @@ sudo chown -R username:username /home/praktikum2025/backup
 touch /home/praktikum2025/workdir/log.txt
 touch /home/praktikum2025/backup/log.txt
 
-## KEGIATAN 2: Managing Swap Filesystem
+KEGIATAN 2: Managing Swap Filesystem
 sudo mkswap /dev/sdb3
 sudo swapon /dev/sdb3
 swapon --show
 sudo swapoff /dev/sdb3
 swapon --show
 
-## KEGIATAN 3: Persisting Filesystem Partition
+KEGIATAN 3: Persisting Filesystem Partition
 lsblk -f
 sudo nano /etc/fstab
 sudo mount -a
